@@ -1,0 +1,4 @@
+Questions
+- Détection début set : détection sonore "Go" ? bouton ?
+- Pénalité collisions entre équipes ? (pas mentionné dans les règles)
+- 
