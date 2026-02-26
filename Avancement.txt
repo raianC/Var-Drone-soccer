@@ -1,1 +1,2 @@
-12/02/25: création du git + activation de la caméra en python sous windows
+12/02/26: création du git + activation de la caméra en python sous windows
+26/02/26: test tracker avec cam360 + avencement interface
