@@ -57,7 +57,7 @@ timer_penalite.timeout.connect(update_timer_penalite) # à chaque "tic" d'horlog
 
 
 
-chrono = QLabel("3:0", fenetre_timer)
+chrono = QLabel( fenetre_timer)
 chrono.setAlignment(Qt.AlignCenter)
 chrono.resize(400, 400)
 chrono.setStyleSheet("color:white; font-size: 40px;")  # augmente la taille d'écriture du chrono                      
