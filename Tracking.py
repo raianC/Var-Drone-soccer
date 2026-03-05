@@ -1,7 +1,7 @@
 import cv2
 
 #récupération de la video, /!\ la sortie camera
-webcam = cv2.VideoCapture(2)
+webcam = cv2.VideoCapture(3)
 
 #test de la camera, q pour sortir
 while True:
@@ -23,7 +23,7 @@ for i in range (0, tot_obj):
     list_obj.append(object)
     cv2.destroyWindow("Select Object to Track")
     nb_obj += 1
-    print(object)
+    #print(object)
     if cv2.waitKey(1) & 0xFF == ord('q') or nb_obj == 4:
         break
 
@@ -46,7 +46,7 @@ while True:
         if success:
             # Draw bounding box
             x, y, w, h = [int(v) for v in box]
-            print("objet n°", nb_obj, " coord", x, y,)
+            #print("objet n°", nb_obj, " coord", x, y,)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(frame, "Tracking obect " + str(nb_obj), (10, 30 + 20*nb_obj), cv2.FONT_HERSHEY_SIMPLEX,
                         0.7, (0, 255, 0), 2)
@@ -60,7 +60,6 @@ while True:
                 
             # Show result
         cv2.imshow("Object Tracking", frame)
-
     # Exit on 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break

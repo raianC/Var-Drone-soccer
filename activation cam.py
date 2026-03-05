@@ -1,5 +1,5 @@
 import cv2
-webcam = cv2.VideoCapture(2) # le chiffre 2 correspond à la caméra fisheye avec un fps élevé
+webcam = cv2.VideoCapture(3) # le chiffre 2 correspond à la caméra fisheye avec un fps élevé
 # on créé une boucle
 while(True):
     #on recupere frame par frame
