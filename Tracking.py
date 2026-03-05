@@ -1,5 +1,8 @@
 import cv2
 
+# commande d'install : pip install opencv-python
+# commande d'install : pip install opencv-contrib-python
+
 #récupération de la video, /!\ la sortie camera
 webcam = cv2.VideoCapture(3)
 
