@@ -2,7 +2,7 @@
 # code inspiré du site: https://wiki.fablab.sorbonne-universite.fr/BookStack/books/logiciels/page/faire-une-interface-graphique-avec-pyside-6
 
 #le Qtimer ne compte pas réellement le temps, il permet de lancer une action de manière périodique
-
+# commande d'installation de PySide6 : pip install PySide6
 # Importation des bibliothèques
 import sys
 from PySide6.QtWidgets import * #importe tous les widgets 

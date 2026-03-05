@@ -1,4 +1,6 @@
 import sys
+# commande d'installation de PySide6 : pip install PySide6
+
 from PySide6.QtWidgets import * #importe tous les widgets 
 from PySide6.QtCore import Qt
 
