@@ -1,76 +1,49 @@
-# tkinker trop limité pour afficher plusieurs choses sur une fenêtre notamment une vidéo donc utilisation de pySide
-# code inspiré du site: https://wiki.fablab.sorbonne-universite.fr/BookStack/books/logiciels/page/faire-une-interface-graphique-avec-pyside-6
-
-#le Qtimer ne compte pas réellement le temps, il permet de lancer une action de manière périodique
-# commande d'installation de PySide6 : pip install PySide6
-# Importation des bibliothèques
-import sys
 from PySide6.QtWidgets import * #importe tous les widgets 
-from PySide6.QtCore import QTimer, Qt #nécessaire Qtimer
 
 
-temps_match=20 # création et initialisation compteur de temps
-temps_penalite=15
 
-def update_timer_match():
-    global temps_match 
-    temps_match -= 1
-    minutes = temps_match//60 # // division entière, sans virgule
-    secondes = temps_match % 60
-    chrono.setText(f"{minutes}:{secondes}")
-    if temps_match == 0:   # si 3 minutes atteintes
-        timer_match.stop()   # on arrête le timer
-        print("Temps match écoulé")
-        update_timer_penalite()
-        timer_penalite.start(1000)
 
+
+
+class Timer(QWidget):
     
+    
+    def __init__(self, duree_match, duree_penalite, chrono, timer_match):
+        super().__init__()
 
-def update_timer_penalite():
-    chrono.setStyleSheet("color: red; font-size: 40px;")
-    global temps_penalite 
-    temps_penalite -= 1
-    minutes = temps_penalite//60 # // division entière, sans virgule
-    secondes = temps_penalite % 60
-    chrono.setText(f"{minutes}:{secondes}")
-    if temps_penalite == 0:   # si 3 minutes atteintes
-        timer_penalite.stop()   # on arrête le timer
-        print("Temps pénalité écoulé")
+        self.duree_match = duree_match
+        self.chrono = chrono
+        self.timer_match = timer_match
+        self.duree_penalite = duree_penalite
 
+        self.mode="match"
 
+    def update_timer_match(self):
+        
+        if self.mode=="match":
+            self.duree_match -= 1
 
-app = QApplication(sys.argv)
-fenetre_timer=QWidget()                    #création fen^tre vide
-fenetre_timer.setWindowTitle("Timer")     # Titre de la fenêtre
-fenetre_timer.resize(400, 400)             # Taille de la fenêtre (largeur x hauteur)
+            minutes = self.duree_match//60 # // division entière, sans virgule
+            secondes = self.duree_match % 60
 
-
-
-
-
-timer_match = QTimer()           # Création d'un QTimer
-timer_match.timeout.connect(update_timer_match) # à chaque "tic" d'horloge exécution de la fonction update_timer
-timer_match.start(1000)
-
-timer_penalite = QTimer()           # Création d'un QTimer
-timer_penalite.timeout.connect(update_timer_penalite) # à chaque "tic" d'horloge exécution de la fonction update_timer
+            self.chrono.setStyleSheet("color:white; font-size:40px; border:2px solid white;")
+            self.chrono.setText(f"{minutes}:{secondes}")
+        
+            if self.duree_match == 0:   # si la fin du temps de match atteint
+                print("Temps match écoulé")
+                self.mode="penalite"
 
 
+        elif self.mode=="penalite":  # on met elif à la palce de if car cela permet de passer à ce bloc si le premier if est faux
+        # sans le elif, quand on passe en mode "penalite" on perd une seconde car sur le même "tic" d'horloge on va rentrer dans la partie penalité
+            self.duree_penalite -= 1
+            
+            minutes = self.duree_penalite//60 # // division entière, sans virgule
+            secondes = self.duree_penalite % 60
 
-chrono = QLabel( fenetre_timer)
-chrono.setAlignment(Qt.AlignCenter)
-chrono.resize(400, 400)
-chrono.setStyleSheet("color:white; font-size: 40px;")  # augmente la taille d'écriture du chrono                      
-
-
-
-
-
-
-
-
-fenetre_timer.show()  
-
-# Lancer la boucle principale
-sys.exit(app.exec())
-
+            self.chrono.setStyleSheet("color: red; font-size: 40px; border:2px solid white;")
+            self.chrono.setText(f"{minutes}:{secondes}")
+            
+            if self.duree_penalite == 0:   # si fin du temps de pénalités atteint
+                self.timer_match.stop()   # on arrête le timer
+                print("Temps pénalité écoulé")
