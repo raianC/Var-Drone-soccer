@@ -12,7 +12,8 @@ from PySide6.QtCore import QTimer, Qt #nécessaire Qtimer
 
 score1=0
 score2=0
-duree_penalite=10
+duree_penalite_accordee_equipe1=10
+duree_penalite_accordee_equipe2=10
 duree_match=20
 
 app = QApplication(sys.argv)
@@ -58,7 +59,7 @@ chrono.setGeometry(0, 0 , largeur_ecran//2, hauteur_ecran//2)
 
 
 timer_match = QTimer() # Création d'un QTimer
-timer = Timer(duree_match, duree_penalite, chrono, timer_match)
+timer = Timer(duree_match, duree_penalite_accordee_equipe1,duree_penalite_accordee_equipe2, chrono, timer_match)
 
 
 points=Score(score1, score2, score)
