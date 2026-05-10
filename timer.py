@@ -32,10 +32,10 @@ class Timer(QWidget):
         
             if self.duree_match == 0:   # si la fin du temps de match atteint
                 print("Temps match écoulé")
-                self.mode="penalite"
+                self.mode="penalite_accordee_equipe1"
 
 
-        elif self.mode=="penalite":  # on met elif à la palce de if car cela permet de passer à ce bloc si le premier if est faux
+        elif self.mode=="penalite_accordee_equipe1":  # on met elif à la palce de if car cela permet de passer à ce bloc si le premier if est faux
         # sans le elif, quand on passe en mode "penalite" on perd une seconde car sur le même "tic" d'horloge on va rentrer dans la partie penalité
             self.duree_penalite_accordee_equipe1 -= 1
             
