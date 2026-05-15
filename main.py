@@ -1,4 +1,6 @@
-# ATTENTION à chaque fois qu'un but aura été détecté il faudra modifier les varaibles score1 et/ou score2 puis obligatoirement faire points.update_score() pour mettre à jour l'affichage
+# A chaque fois qu'un but sera détecté il faut faire soit points.ajouter_point_equipe2() soit points.ajouter_point_equipe2() : ça détecte si on a bien un jeu en cours pour ne pas ajouter des points si on n'est pas en train de jouer
+# pour la durée des sets il faut mettre dans le main le temps désiré en secondes dans la variable duree_match
+# pour le temps de pénalité il faut ajouter 10 secondes soit à duree_penalite_accordee_equipe1, soit à duree_penalite_accordee_equipe2 : ce temps là sera transmis à la fin du set au timer pour exécuter ou non le temps de pénalité -> ATTENTION: erreur de la part de l'équipe 1 => +10secondes à duree_penalite_accordee_equipe2 , pas à duree_penalite_accordee_equipe1
 
 from timer import Timer
 from score import Score
@@ -6,11 +8,6 @@ from score import Score
 import sys
 from PySide6.QtWidgets import *
 from PySide6.QtCore import QTimer, Qt
-
-score1 = 0
-score2 = 0
-score1_total=0
-score2_total=0
 
 duree_penalite_accordee_equipe1 = 0
 duree_penalite_accordee_equipe2 = 0
@@ -35,6 +32,8 @@ def start_set():
     bouton_start_set.hide()
     timer_match.timeout.connect(timer.update_timer_match)
 
+    points.start_set()
+
 
 def fin_set():
     timer_match.timeout.disconnect(timer.update_timer_match)
@@ -42,6 +41,7 @@ def fin_set():
     numero_set += 1
     timer.reset_match()
 
+    points.fin_set()
 
     #juste pour les tests avant la partie de Dorian
     global duree_penalite_accordee_equipe1
@@ -57,7 +57,8 @@ def fin_set():
         fin_penalite_accordee_equipe1()
 
 def start_penalite_equipe1():
-    
+    points.start_penalite()
+
     timer.duree_penalite_accordee_equipe1=duree_penalite_accordee_equipe1
     
     bouton_start_penalite_equipe1.hide()
@@ -65,7 +66,7 @@ def start_penalite_equipe1():
     timer_match.timeout.connect(timer.penalite_accordee_equipe1)
 
 def start_penalite_equipe2():
-
+    points.start_penalite()
     
     timer.duree_penalite_accordee_equipe2=duree_penalite_accordee_equipe2
   
@@ -75,14 +76,31 @@ def start_penalite_equipe2():
 
 
 def fin_penalite_accordee_equipe1():
-    timer_match.timeout.disconnect(timer.penalite_accordee_equipe1)
+    points.fin_penalite()
+   
+    #déconnecte uniquement si a été connecté avant
+    try:
+        timer_match.timeout.disconnect(timer.penalite_accordee_equipe1)
+    except TypeError:
+        pass
+
     if duree_penalite_accordee_equipe2 > 0:
         bouton_start_penalite_equipe2.show()
     else:
         fin_penalite_accordee_equipe2()
 
 def fin_penalite_accordee_equipe2():
-    timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
+    points.fin_penalite()
+    points.ajouter_set_au_total()
+
+
+    #déconnecte uniquement si a été connecté avant
+    try:
+        timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
+    except TypeError:
+        pass
+
+        
     if(numero_set<nombre_sets+1):
         bouton_start_set.setText(f"START SET {numero_set}")
         bouton_start_set.show()
@@ -100,8 +118,10 @@ def choisir_2_sets():
     bouton_start_set.show()
     chrono.show()
     score.show()
+    score_total.show()
 
-    
+    texte_score_set_en_cours.show()
+    texte_score_total_sets_precedents.show()
 
 
 def choisir_3_sets():
@@ -116,6 +136,10 @@ def choisir_3_sets():
     bouton_start_set.show()
     chrono.show()
     score.show()
+    score_total.show()
+
+    texte_score_set_en_cours.show()
+    texte_score_total_sets_precedents.show()
 
 
 chrono = QLabel(interface)
@@ -149,6 +173,14 @@ score.setStyleSheet(
 score.hide()
 
 
+score_total = QLabel(interface)
+score_total.setAlignment(Qt.AlignCenter)
+score_total.setStyleSheet(
+    "color:white; font-size:40px;border:2px solid white;"
+)
+score_total.hide()
+
+
 texte_accueil = QLabel(interface)
 texte_accueil.setText("Bonjour !\nCombien de sets voulez-vous réaliser ?")
 texte_accueil.setAlignment(Qt.AlignCenter)
@@ -156,7 +188,21 @@ texte_accueil.setStyleSheet(
     "color:white; font-size:40px; font-weight:bold;"
 )
 
+texte_score_set_en_cours = QLabel(interface)
+texte_score_set_en_cours.setText("Score du set en cours")
+texte_score_set_en_cours.setAlignment(Qt.AlignCenter)
+texte_score_set_en_cours.setStyleSheet(
+    "color:white; font-size:40px; font-weight:bold;"
+)
+texte_score_set_en_cours.hide()
 
+texte_score_total_sets_precedents = QLabel(interface)
+texte_score_total_sets_precedents.setText("Score total des set précédents")
+texte_score_total_sets_precedents.setAlignment(Qt.AlignCenter)
+texte_score_total_sets_precedents.setStyleSheet(
+    "color:white; font-size:40px; font-weight:bold;"
+)
+texte_score_total_sets_precedents.hide()
 
 interface.showFullScreen()
 
@@ -202,6 +248,23 @@ texte_accueil.setGeometry(
 )
 
 
+# texte_score_set_en_cours
+texte_score_set_en_cours.setGeometry(
+    largeur_ecran // 2,          # moitié droite
+    hauteur_ecran // 20,        # en haut
+    largeur_ecran // 2,         # largeur moitié écran
+    hauteur_ecran // 20         # petite hauteur pour titre
+)
+
+#texte_score_total_sets_precedents
+texte_score_total_sets_precedents.setGeometry(
+    largeur_ecran // 2,              # moitié droite
+    hauteur_ecran // 2 + hauteur_ecran // 20,   # début du bas
+    largeur_ecran // 2,
+    hauteur_ecran // 20
+)
+
+
 # Bouton START_SET
 bouton_start_set.setGeometry(
     (largeur_ecran // 2) - largeur_ecran // 10,
@@ -241,6 +304,13 @@ score.setGeometry(
     hauteur_ecran // 2
 )
 
+score_total.setGeometry(
+    largeur_ecran // 2,
+    hauteur_ecran//2,
+    largeur_ecran // 2,
+    hauteur_ecran // 2
+)
+
 chrono.setGeometry(
     0,
     0,
@@ -266,8 +336,8 @@ timer = Timer(
 
 )
 
-points = Score(score1, score2, score)
-points.update_score()
+points = Score(score,score_total)
+
 
 
 
