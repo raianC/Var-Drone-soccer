@@ -5,7 +5,7 @@ import Goals
 # commande d'install : pip install opencv-contrib-python
 
 #récupération de la video, /!\ la sortie camera
-webcam = cv2.VideoCapture(3)
+webcam = cv2.VideoCapture("C:\\Users\\ghost\\Downloads\\DualDrone1.mp4")
 
 #test de la camera, q pour sortir
 while True:
@@ -56,7 +56,7 @@ while True:
                             nb_obj)
             #print("objet n°", nb_obj, " coord", x, y,)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, "Tracking obect " + str(nb_obj), (10, 30 + 20*nb_obj), cv2.FONT_HERSHEY_SIMPLEX,
+            cv2.putText(frame, "Tracking object " + str(nb_obj), (10, 30 + 20*nb_obj), cv2.FONT_HERSHEY_SIMPLEX,
                         0.7, (0, 255, 0), 2)
             text = "Object" + str(nb_obj)
             cv2.putText(frame, text, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX,
@@ -69,6 +69,14 @@ while True:
 
             # Show result
         cv2.imshow("Object Tracking", frame)
+
+        
+    #Autorise le prochain but 
+    if cv2.waitKey(1) & 0xFF == ord('l'):
+            Goals.Goal_is_possible(0)
+    if cv2.waitKey(1) & 0xFF == ord('m'):
+            Goals.Goal_is_possible(1)
+            
     # Exit on 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break

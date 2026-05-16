@@ -10,6 +10,8 @@ StrikerB = 0
 
 #Séléction des cerceaux
 def GoalCreation(frame):
+    cv2.putText(frame, "Selection des cerceaux", (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.7, (0, 0, 255), 2)
     for i in range (0, 2):
         goal_zone = cv2.selectROI("Select Goal", frame, fromCenter=False, showCrosshair=True)
         list_goals.append(goal_zone)
@@ -51,13 +53,16 @@ def DrawGoals(frame):
     cv2.rectangle(frame, (goal_x, goal_y), (goal_x + goal_w, goal_y + goal_h), (0, 0, 255), 2)
     cv2.putText(frame, "Goal Team B", (goal_x, goal_y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
+    #Affichage du score
+    cv2.putText(frame, "Score A/B " + str(score[0]) + "/" + str(score[1]), (300, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.7, (0, 0, 255), 2)
     return
 
 def Goal_is_possible(Team):
     global  A_Valid_goal, B_Valid_goal
-    if Team == 1:
+    if Team == 0:
         A_Valid_goal = True
-    if Team == 2:
+    if Team == 1:
         B_Valid_goal = True
     return
 
