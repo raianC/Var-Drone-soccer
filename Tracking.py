@@ -1,4 +1,5 @@
 import cv2
+import Goals
 
 # commande d'install : pip install opencv-python
 # commande d'install : pip install opencv-contrib-python
@@ -30,6 +31,8 @@ for i in range (0, tot_obj):
     if cv2.waitKey(1) & 0xFF == ord('q') or nb_obj == 4:
         break
 
+Goals.GoalCreation(frame)
+Goals.set_team_Striker()
 for object in list_obj:
     tracker = cv2.TrackerCSRT_create()
     tracker.init(frame, object)
@@ -49,6 +52,8 @@ while True:
         if success:
             # Draw bounding box
             x, y, w, h = [int(v) for v in box]
+            Goals.test_goal(x,y,w,h,
+                            nb_obj)
             #print("objet n°", nb_obj, " coord", x, y,)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(frame, "Tracking obect " + str(nb_obj), (10, 30 + 20*nb_obj), cv2.FONT_HERSHEY_SIMPLEX,
@@ -60,7 +65,8 @@ while True:
             cv2.putText(frame, "Lost object " + str(nb_obj), (10, 30 + 20*nb_obj), cv2.FONT_HERSHEY_SIMPLEX,
                         0.7, (0, 0, 255), 2)
         nb_obj +=1
-                
+        Goals.DrawGoals(frame)
+
             # Show result
         cv2.imshow("Object Tracking", frame)
     # Exit on 'q'
