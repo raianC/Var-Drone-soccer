@@ -4,7 +4,9 @@
 
 from timer import Timer
 from score import Score
-
+from camera_live import CameraWidget
+from video_bouton import VideoButton
+import cv2
 import sys
 from PySide6.QtWidgets import *
 from PySide6.QtCore import QTimer, Qt
@@ -122,6 +124,8 @@ def choisir_2_sets():
 
     texte_score_set_en_cours.show()
     texte_score_total_sets_precedents.show()
+    
+    cam.start()
 
 
 def choisir_3_sets():
@@ -140,6 +144,8 @@ def choisir_3_sets():
 
     texte_score_set_en_cours.show()
     texte_score_total_sets_precedents.show()
+    
+    cam.start()
 
 
 chrono = QLabel(interface)
@@ -338,13 +344,11 @@ timer = Timer(
 
 points = Score(score,score_total)
 
+btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Vidéo")
+btn_video.show()
 
 
-
-
-
-
-
+cam = CameraWidget(interface ,largeur_ecran, hauteur_ecran)
 
 
 sys.exit(app.exec())
