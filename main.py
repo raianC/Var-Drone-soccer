@@ -203,7 +203,7 @@ texte_score_set_en_cours.setStyleSheet(
 texte_score_set_en_cours.hide()
 
 texte_score_total_sets_precedents = QLabel(interface)
-texte_score_total_sets_precedents.setText("Score total des set précédents")
+texte_score_total_sets_precedents.setText("Score total des sets précédents")
 texte_score_total_sets_precedents.setAlignment(Qt.AlignCenter)
 texte_score_total_sets_precedents.setStyleSheet(
     "color:white; font-size:40px; font-weight:bold;"
