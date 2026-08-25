@@ -108,34 +108,34 @@ def fin_penalite_accordee_equipe2():
         bouton_start_set.show()
 
 
-def choisir_2_sets():
-    global nombre_sets
+#def choisir_2_sets():
+#    global nombre_sets
+#
+#    nombre_sets = 2
 
-    nombre_sets = 2
-
-    bouton_2sets.hide()
-    bouton_3sets.hide()
-    texte_accueil.hide()
+#    bouton_2sets.hide()
+#    bouton_3sets.hide()
+#    texte_accueil.hide()
     
-    bouton_start_set.show()
-    chrono.show()
-    score.show()
-    score_total.show()
+#    bouton_start_set.show()
+#    chrono.show()
+#    score.show()
+#    score_total.show()
 
-    texte_score_set_en_cours.show()
-    texte_score_total_sets_precedents.show()
+#    texte_score_set_en_cours.show()
+#    texte_score_total_sets_precedents.show()
     
-    cam.start()
+#    cam.start()
 
 
-def choisir_3_sets():
+def start_game():
     global nombre_sets
 
     nombre_sets = 3
 
-    bouton_2sets.hide()
-    bouton_3sets.hide()
-    texte_accueil.hide()
+    #bouton_2sets.hide()
+    #bouton_3sets.hide()
+   #texte_accueil.hide()
    
     bouton_start_set.show()
     chrono.show()
@@ -168,8 +168,8 @@ bouton_start_penalite_equipe1.hide()
 bouton_start_penalite_equipe2 = QPushButton(f"START PENALITE ACCORDEE A L'EQUIPE 2", interface)
 bouton_start_penalite_equipe2.hide()
 
-bouton_2sets = QPushButton("2 sets", interface)
-bouton_3sets = QPushButton("3 sets", interface)
+#bouton_2sets = QPushButton("2 sets", interface)
+#bouton_3sets = QPushButton("3 sets", interface)
 
 score = QLabel(interface)
 score.setAlignment(Qt.AlignCenter)
@@ -187,12 +187,12 @@ score_total.setStyleSheet(
 score_total.hide()
 
 
-texte_accueil = QLabel(interface)
-texte_accueil.setText("Bonjour !\nCombien de sets voulez-vous réaliser ?")
-texte_accueil.setAlignment(Qt.AlignCenter)
-texte_accueil.setStyleSheet(
-    "color:white; font-size:40px; font-weight:bold;"
-)
+#texte_accueil = QLabel(interface)
+#texte_accueil.setText("Bonjour !\nCombien de sets voulez-vous réaliser ?")
+#texte_accueil.setAlignment(Qt.AlignCenter)
+#texte_accueil.setStyleSheet(
+#    "color:white; font-size:40px; font-weight:bold;"
+#)
 
 texte_score_set_en_cours = QLabel(interface)
 texte_score_set_en_cours.setText("Score du set en cours")
@@ -228,30 +228,30 @@ bouton_quitter.raise_()
 bouton_quitter.clicked.connect(interface.close)
 
 # Bouton 2 sets
-bouton_2sets.setGeometry(
-    largeur_ecran // 2 - largeur_ecran // 10 - 20,
-    hauteur_ecran // 2,
-    largeur_ecran // 10,
-    hauteur_ecran // 10
-)
-bouton_2sets.clicked.connect(choisir_2_sets)
+#bouton_2sets.setGeometry(
+#    largeur_ecran // 2 - largeur_ecran // 10 - 20,
+#    hauteur_ecran // 2,
+#    largeur_ecran // 10,
+#    hauteur_ecran // 10
+#)
+#bouton_2sets.clicked.connect(choisir_2_sets)
 
 # Bouton 3 sets
-bouton_3sets.setGeometry(
-    largeur_ecran // 2 + 20,
-    hauteur_ecran // 2,
-    largeur_ecran // 10,
-    hauteur_ecran // 10
-)
-bouton_3sets.clicked.connect(choisir_3_sets)
+# bouton_3sets.setGeometry(
+#    largeur_ecran // 2,
+#    hauteur_ecran // 2,
+#    largeur_ecran // 10,
+#    hauteur_ecran // 10
+#)
+#bouton_3sets.clicked.connect(choisir_3_sets)
 
 # texte accueil
-texte_accueil.setGeometry(
-    0,
-    hauteur_ecran // 4,
-    largeur_ecran,
-    hauteur_ecran // 6
-)
+#texte_accueil.setGeometry(
+#    0,
+#    hauteur_ecran // 4,
+#   largeur_ecran,
+#   hauteur_ecran // 6
+#)
 
 
 # texte_score_set_en_cours
@@ -350,5 +350,5 @@ btn_video.show()
 
 cam = CameraWidget(interface ,largeur_ecran, hauteur_ecran)
 
-
+start_game()
 sys.exit(app.exec())
