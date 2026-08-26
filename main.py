@@ -15,7 +15,7 @@ duree_penalite_accordee_equipe1 = 0
 duree_penalite_accordee_equipe2 = 0
 duree_match = 8
 
-nombre_sets = 0
+#nombre_sets = 0
 numero_set = 1
 
 app = QApplication(sys.argv)
@@ -40,9 +40,8 @@ def start_set():
 def fin_set():
     timer_match.timeout.disconnect(timer.update_timer_match)
     global numero_set
-    numero_set += 1
     timer.reset_match()
-
+    numero_set += 1
     points.fin_set()
 
     #juste pour les tests avant la partie de Dorian
@@ -50,7 +49,7 @@ def fin_set():
     duree_penalite_accordee_equipe1=5
     global duree_penalite_accordee_equipe2
     duree_penalite_accordee_equipe2=5
-
+    
 
 
     if duree_penalite_accordee_equipe1 > 0:
@@ -76,6 +75,9 @@ def start_penalite_equipe2():
     timer_match.start(1000)
     timer_match.timeout.connect(timer.penalite_accordee_equipe2)
 
+    #ligne de test, à suprimer:
+    if numero_set-1==1 or numero_set-1==3:
+        points.ajouter_point_equipe2()
 
 def fin_penalite_accordee_equipe1():
     points.fin_penalite()
@@ -92,9 +94,12 @@ def fin_penalite_accordee_equipe1():
         fin_penalite_accordee_equipe2()
 
 def fin_penalite_accordee_equipe2():
+
+    
+
     points.fin_penalite()
     points.ajouter_set_au_total()
-
+    points.update_sets_gagnes()
 
     #déconnecte uniquement si a été connecté avant
     try:
@@ -103,9 +108,13 @@ def fin_penalite_accordee_equipe2():
         pass
 
         
-    if(numero_set<nombre_sets+1):
+    if  points.test_winner()==False and numero_set-1<3: # nouveau set tant qu'il n'y a pas de gagnant et qu'on n'a pas atteint les 3 sets
+    # numero_set-1 et non numero_set car numero_set est incrémenté à la fin du set et non à la fin des penalites 
+    # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
         bouton_start_set.setText(f"START SET {numero_set}")
         bouton_start_set.show()
+        
+
 
 
 #def choisir_2_sets():
@@ -129,13 +138,13 @@ def fin_penalite_accordee_equipe2():
 
 
 def start_game():
-    global nombre_sets
+    #global nombre_sets
 
-    nombre_sets = 3
+    #nombre_sets = 3
 
     #bouton_2sets.hide()
     #bouton_3sets.hide()
-   #texte_accueil.hide()
+    #texte_accueil.hide()
    
     bouton_start_set.show()
     chrono.show()
@@ -143,7 +152,8 @@ def start_game():
     score_total.show()
 
     texte_score_set_en_cours.show()
-    texte_score_total_sets_precedents.show()
+    texte_nb_sets_total_gagnes.show()
+    #texte_score_total_sets_precedents.show()
     
     cam.start()
 
@@ -186,6 +196,13 @@ score_total.setStyleSheet(
 )
 score_total.hide()
 
+total_sets_gagnes = QLabel(interface)
+total_sets_gagnes.setAlignment(Qt.AlignCenter)
+total_sets_gagnes.setStyleSheet(
+    "color:white; font-size:40px;border:2px solid white;"
+)
+total_sets_gagnes.hide()
+
 
 #texte_accueil = QLabel(interface)
 #texte_accueil.setText("Bonjour !\nCombien de sets voulez-vous réaliser ?")
@@ -201,6 +218,16 @@ texte_score_set_en_cours.setStyleSheet(
     "color:white; font-size:40px; font-weight:bold;"
 )
 texte_score_set_en_cours.hide()
+
+
+texte_nb_sets_total_gagnes = QLabel(interface)
+texte_nb_sets_total_gagnes.setText("Total sets gagnés")
+texte_nb_sets_total_gagnes.setAlignment(Qt.AlignCenter)
+texte_nb_sets_total_gagnes.setStyleSheet(
+    "color:white; font-size:40px; font-weight:bold;"
+)
+texte_nb_sets_total_gagnes.hide()
+
 
 texte_score_total_sets_precedents = QLabel(interface)
 texte_score_total_sets_precedents.setText("Score total des sets précédents")
@@ -262,6 +289,16 @@ texte_score_set_en_cours.setGeometry(
     hauteur_ecran // 20         # petite hauteur pour titre
 )
 
+
+#texte_nb_sets_total_gagnes
+texte_nb_sets_total_gagnes.setGeometry(
+    largeur_ecran // 2,              # moitié droite
+    hauteur_ecran // 2 + hauteur_ecran // 20,   # début du bas
+    largeur_ecran // 2,
+    hauteur_ecran // 15
+)
+
+
 #texte_score_total_sets_precedents
 texte_score_total_sets_precedents.setGeometry(
     largeur_ecran // 2,              # moitié droite
@@ -269,6 +306,8 @@ texte_score_total_sets_precedents.setGeometry(
     largeur_ecran // 2,
     hauteur_ecran // 20
 )
+
+
 
 
 # Bouton START_SET
@@ -317,6 +356,15 @@ score_total.setGeometry(
     hauteur_ecran // 2
 )
 
+
+total_sets_gagnes.setGeometry(
+    largeur_ecran // 2,
+    hauteur_ecran//2,
+    largeur_ecran // 2,
+    hauteur_ecran // 2
+)
+
+
 chrono.setGeometry(
     0,
     0,
@@ -342,7 +390,7 @@ timer = Timer(
 
 )
 
-points = Score(score,score_total)
+points = Score(score,score_total, total_sets_gagnes)
 
 btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Vidéo")
 btn_video.show()
