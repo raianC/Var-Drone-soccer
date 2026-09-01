@@ -10,6 +10,7 @@ import cv2
 import sys
 from PySide6.QtWidgets import *
 from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QShortcut, QKeySequence
 
 duree_penalite_accordee_equipe1 = 0
 duree_penalite_accordee_equipe2 = 0
@@ -160,7 +161,9 @@ def start_game():
     cam.start()
     btn_video.raise_button_replay()
 
-
+def sauvegarde_touche(categorie):
+    cam.enregistrer_video(categorie)
+    
 chrono = QLabel(interface)
 chrono.setAlignment(Qt.AlignCenter)
 chrono.setText("0:0")
@@ -414,12 +417,22 @@ timer = Timer(
 
 points = Score(score1,score2,score_total, total_sets_gagnes)
 
-btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Vidéo")
+btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Videos")
 btn_video.show()
 
 
 
 cam = CameraWidget(interface ,largeur_ecran, hauteur_ecran)
+
+equipe1=QShortcut(QKeySequence("Ctrl+1"), interface)
+equipe1.activated.connect( lambda: sauvegarde_touche("but_equipe1"))
+
+equipe2=QShortcut(QKeySequence("Ctrl+2"), interface)
+equipe2.activated.connect(lambda: sauvegarde_touche("but_equipe2"))
+
+faute=QShortcut(QKeySequence("Ctrl+3"), interface)
+faute.activated.connect(lambda:sauvegarde_touche("faute"))
+
 
 start_game()
 sys.exit(app.exec())
