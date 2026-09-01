@@ -1,6 +1,9 @@
 from PySide6.QtWidgets import QLabel, QDialog, QVBoxLayout, QComboBox, QDialogButtonBox
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QImage, QPixmap
+from collections import deque
+import time
+import os
 import cv2
 
 
@@ -75,6 +78,15 @@ class CameraWidget:
         self.hauteur_ecran = hauteur_ecran
         self.camera_index = 0
         self.capture = None
+        self.fps = 30  
+        self.duree_buffer=10
+        self.buffer = deque(maxlen=self.duree_buffer * self.fps)
+        
+        self.compteurs ={
+            "but_equipe1":0,
+            "but_equipe2":0,
+            "faute":0
+        }
 
         # Dimensions : même taille que chrono/score (moitié écran)
         self.cam_width = largeur_ecran // 2
@@ -140,6 +152,8 @@ class CameraWidget:
         if not ret:
             return
 
+        self.buffer.append(frame.copy()) 
+        
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         h, w, ch = frame_rgb.shape
         qt_image = QImage(frame_rgb.data, w, h, ch * w, QImage.Format_RGB888)
@@ -150,3 +164,25 @@ class CameraWidget:
             Qt.SmoothTransformation,
         )
         self.label.setPixmap(pixmap)
+        
+    def enregistrer_video(self, nom_fichier):
+        if len(self.buffer) == 0:
+            print("Buffer is empty, no video to save.")
+            return
+        if nom_fichier not in self.compteurs:
+            self.compteurs[nom_fichier] = 0
+        self.compteurs[nom_fichier] += 1
+        dossier = "Videos"
+        if not os.path.exists(dossier):
+            os.makedirs(dossier)
+            
+        nom_fichier_complet = os.path.join(dossier, f"{nom_fichier}_{self.compteurs[nom_fichier]}.avi")
+        height, width, _ = self.buffer[0].shape
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        video = cv2.VideoWriter(nom_fichier_complet, fourcc, self.fps, (width, height))
+        for frame in self.buffer:
+            video.write(frame)
+        video.release()
+        
+        print(f"Video saved as {nom_fichier_complet}")
+        

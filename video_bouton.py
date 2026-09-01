@@ -8,7 +8,7 @@ import os
 EXTENSIONS_VIDEO = (".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv", ".webm")
 
 
-def _lister_videos(dossier="Vidéo"):
+def _lister_videos(dossier="Videos"):
     """Retourne la liste des fichiers vidéo trouvés dans le dossier."""
     if not os.path.isdir(dossier):
         return []
@@ -19,9 +19,9 @@ def _lister_videos(dossier="Vidéo"):
 
 
 class VideoSelectDialog(QDialog):
-    """Boîte de dialogue pour choisir une vidéo dans le dossier 'Vidéo'."""
+    """Boîte de dialogue pour choisir une vidéo dans le dossier 'Video'."""
 
-    def __init__(self, parent=None, dossier="Vidéo"):
+    def __init__(self, parent=None, dossier="Videos"):
         super().__init__(parent)
         self.setWindowTitle("Choisir une vidéo")
         self.setModal(True)
