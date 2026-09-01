@@ -395,7 +395,7 @@ timer = Timer(
 
 points = Score(score,score_total, total_sets_gagnes)
 
-btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Vidéo")
+btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Videos")
 btn_video.show()
 
 
