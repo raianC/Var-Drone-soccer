@@ -2,9 +2,10 @@
 import cv2
 
 list_goals = []
-A_Valid_goal = True
-B_Valid_goal = True
+A_Goal_Validated = True
+B_Goal_Validated = True
 score = [0,0]
+foul = 0
 StrikerA = 0
 StrikerB = 0
 
@@ -27,18 +28,29 @@ def set_team_Striker():
 
 #Test si le but est valide
 def test_goal(drone_x,drone_y,drone_w,drone_h,drone_ID):
-    global score, A_Valid_goal, B_Valid_goal
+    global score, A_Goal_Validated, B_Goal_Validated
     if drone_ID == StrikerA:
         goal_x,goal_y,goal_w,goal_h = list_goals[1]
-        if (drone_x>goal_x and drone_y>goal_y and (drone_x+drone_w)<(goal_x+goal_w) and (drone_y+drone_h)<(goal_y+goal_h)) and A_Valid_goal:
-            score[0]+=1
-            A_Valid_goal = False
+        if (drone_x>goal_x and drone_y>goal_y and (drone_x+drone_w)<(goal_x+goal_w) and (drone_y+drone_h)<(goal_y+goal_h)):
+            if A_Goal_Validated == True:
+                A_Goal_Validated = False
+            else:
+                foul+=1
 
     if drone_ID == StrikerB:
         goal_x,goal_y,goal_w,goal_h = list_goals[0]
-        if (drone_x>goal_x and drone_y>goal_y and (drone_x+drone_w)<(goal_x+goal_w) and (drone_y+drone_h)<(goal_y+goal_h)) and B_Valid_goal:
-            score[1]+=1
-            B_Valid_goal = False
+        if (drone_x>goal_x and drone_y>goal_y and (drone_x+drone_w)<(goal_x+goal_w) and (drone_y+drone_h)<(goal_y+goal_h)):
+                if B_Goal_Validated == True:
+                   B_Goal_Validated = False 
+                else:
+                    foul+=1
+    
+    if drone_ID != StrikerA and drone_ID != StrikerB:
+        goal_x,goal_y,goal_w,goal_h = list_goals[0]
+        if (drone_x>goal_x and drone_y>goal_y and (drone_x+drone_w)<(goal_x+goal_w) and (drone_y+drone_h)<(goal_y+goal_h)):
+            foul+=1
+        
+            
     return
 
 def DrawGoals(frame):
@@ -59,10 +71,16 @@ def DrawGoals(frame):
     return
 
 def Goal_is_possible(Team):
-    global  A_Valid_goal, B_Valid_goal
+    global  A_Goal_Validated, B_Goal_Validated
     if Team == 0:
-        A_Valid_goal = True
+        A_Goal_Validated = True
+        score[0]+=1
+        
+
     if Team == 1:
-        B_Valid_goal = True
+        B_Goal_Validated = True
+        score[1]+=1
+        
+
     return
 
