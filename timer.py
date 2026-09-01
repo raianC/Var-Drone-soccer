@@ -32,7 +32,7 @@ class Timer(QWidget):
         minutes = self.duree_match//60 # // division entière, sans virgule
         secondes = self.duree_match % 60
 
-        self.chrono.setStyleSheet("color:white; font-size:40px; border:2px solid white;")
+        self.chrono.setStyleSheet("color:white; font-size:40px;")
         self.chrono.setText(f"{minutes}:{secondes}")
         
         if self.duree_match <= 0 :   # si la fin du temps de match atteint

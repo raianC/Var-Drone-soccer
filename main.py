@@ -148,21 +148,24 @@ def start_game():
    
     bouton_start_set.show()
     chrono.show()
-    score.show()
+    score1.show()
+    score2.show()
     score_total.show()
 
-    texte_score_set_en_cours.show()
-    texte_nb_sets_total_gagnes.show()
+    texte_team1.show()
+    texte_team2.show()
+    #texte_nb_sets_total_gagnes.show()
     #texte_score_total_sets_precedents.show()
     
     cam.start()
+    btn_video.raise_button_replay()
 
 
 chrono = QLabel(interface)
 chrono.setAlignment(Qt.AlignCenter)
 chrono.setText("0:0")
 chrono.setStyleSheet(
-    "color:white; font-size:40px;border:2px solid white;"
+    "color:white; font-size:40px;"
 )
 chrono.hide()
 
@@ -178,47 +181,59 @@ bouton_start_penalite_equipe1.hide()
 bouton_start_penalite_equipe2 = QPushButton(f"START PENALITE ACCORDEE A L'EQUIPE 2", interface)
 bouton_start_penalite_equipe2.hide()
 
-#bouton_2sets = QPushButton("2 sets", interface)
-#bouton_3sets = QPushButton("3 sets", interface)
 
-score = QLabel(interface)
-score.setAlignment(Qt.AlignCenter)
-score.setStyleSheet(
-    "color:white; font-size:40px;border:2px solid white;"
+
+score1 = QLabel(interface)
+score1.setAlignment(Qt.AlignCenter)
+score1.setStyleSheet(
+    "color:blue; font-size:40px;"
 )
-score.hide()
+score1.hide()
 
+score2 = QLabel(interface)
+score2.setAlignment(Qt.AlignCenter)
+score2.setStyleSheet(
+    "color:red; font-size:40px;"
+)
+score2.hide()
 
 score_total = QLabel(interface)
 score_total.setAlignment(Qt.AlignCenter)
 score_total.setStyleSheet(
-    "color:white; font-size:40px;border:2px solid white;"
+    "color:white; font-size:40px;"
 )
 score_total.hide()
 
 total_sets_gagnes = QLabel(interface)
 total_sets_gagnes.setAlignment(Qt.AlignCenter)
 total_sets_gagnes.setStyleSheet(
-    "color:white; font-size:40px;border:2px solid white;"
+    "color:white; font-size:40px;"
 )
 total_sets_gagnes.hide()
 
 
-#texte_accueil = QLabel(interface)
-#texte_accueil.setText("Bonjour !\nCombien de sets voulez-vous réaliser ?")
-#texte_accueil.setAlignment(Qt.AlignCenter)
-#texte_accueil.setStyleSheet(
-#    "color:white; font-size:40px; font-weight:bold;"
-#)
-
-texte_score_set_en_cours = QLabel(interface)
-texte_score_set_en_cours.setText("Score du set en cours")
-texte_score_set_en_cours.setAlignment(Qt.AlignCenter)
-texte_score_set_en_cours.setStyleSheet(
-    "color:white; font-size:40px; font-weight:bold;"
+texte_entete = QLabel(interface)
+texte_entete.setText("VAR DRONE SOCCER")
+texte_entete.setAlignment(Qt.AlignCenter)
+texte_entete.setStyleSheet(
+    "color:white; font-size:60px; font-weight:bold;border:2px solid white;"
 )
-texte_score_set_en_cours.hide()
 
+texte_team1 = QLabel(interface)
+texte_team1.setText("Team 1")
+texte_team1.setAlignment(Qt.AlignCenter)
+texte_team1.setStyleSheet(
+    "color:red; font-size:50px; font-weight:bold;"
+)
+texte_team1.hide()
+
+texte_team2 = QLabel(interface)
+texte_team2.setText("Team 2")
+texte_team2.setAlignment(Qt.AlignCenter)
+texte_team2.setStyleSheet(
+    "color:blue; font-size:50px; font-weight:bold;"
+)
+texte_team2.hide()
 
 texte_nb_sets_total_gagnes = QLabel(interface)
 texte_nb_sets_total_gagnes.setText("Total sets gagnés")
@@ -229,13 +244,13 @@ texte_nb_sets_total_gagnes.setStyleSheet(
 texte_nb_sets_total_gagnes.hide()
 
 
-texte_score_total_sets_precedents = QLabel(interface)
-texte_score_total_sets_precedents.setText("Score total des sets précédents")
-texte_score_total_sets_precedents.setAlignment(Qt.AlignCenter)
-texte_score_total_sets_precedents.setStyleSheet(
-    "color:white; font-size:40px; font-weight:bold;"
-)
-texte_score_total_sets_precedents.hide()
+#texte_score_total_sets_precedents = QLabel(interface)
+#texte_score_total_sets_precedents.setText("Score total des sets précédents")
+#texte_score_total_sets_precedents.setAlignment(Qt.AlignCenter)
+#texte_score_total_sets_precedents.setStyleSheet(
+#    "color:white; font-size:40px; font-weight:bold;"
+#)
+#texte_score_total_sets_precedents.hide()
 
 interface.showFullScreen()
 
@@ -254,40 +269,39 @@ bouton_quitter.setGeometry(
 bouton_quitter.raise_()
 bouton_quitter.clicked.connect(interface.close)
 
-# Bouton 2 sets
-#bouton_2sets.setGeometry(
-#    largeur_ecran // 2 - largeur_ecran // 10 - 20,
-#    hauteur_ecran // 2,
-#    largeur_ecran // 10,
-#    hauteur_ecran // 10
-#)
-#bouton_2sets.clicked.connect(choisir_2_sets)
-
-# Bouton 3 sets
-# bouton_3sets.setGeometry(
-#    largeur_ecran // 2,
-#    hauteur_ecran // 2,
-#    largeur_ecran // 10,
-#    hauteur_ecran // 10
-#)
-#bouton_3sets.clicked.connect(choisir_3_sets)
-
-# texte accueil
-#texte_accueil.setGeometry(
-#    0,
-#    hauteur_ecran // 4,
-#   largeur_ecran,
-#   hauteur_ecran // 6
-#)
 
 
-# texte_score_set_en_cours
-texte_score_set_en_cours.setGeometry(
-    largeur_ecran // 2,          # moitié droite
-    hauteur_ecran // 20,        # en haut
-    largeur_ecran // 2,         # largeur moitié écran
-    hauteur_ecran // 20         # petite hauteur pour titre
+# texte entete
+texte_entete.setGeometry(
+    0,
+    0,
+   largeur_ecran,
+   hauteur_ecran // 6
 )
+
+
+# texte_team1
+texte_team1.setGeometry(
+    largeur_ecran // 2,        # moitié droite
+    hauteur_ecran // 4,        # en haut
+    largeur_ecran // 4,        # largeur moitié écran
+    hauteur_ecran // 20        # petite hauteur pour titre
+)
+
+# texte_team1
+texte_team2.setGeometry(
+    largeur_ecran // 2+ largeur_ecran//8,          
+    hauteur_ecran // 4,        # en haut
+    largeur_ecran // 2,        # largeur moitié écran
+    hauteur_ecran // 20        # petite hauteur pour titre
+)
+
+
+
+
+
+
+
 
 
 #texte_nb_sets_total_gagnes
@@ -300,20 +314,20 @@ texte_nb_sets_total_gagnes.setGeometry(
 
 
 #texte_score_total_sets_precedents
-texte_score_total_sets_precedents.setGeometry(
-    largeur_ecran // 2,              # moitié droite
-    hauteur_ecran // 2 + hauteur_ecran // 20,   # début du bas
-    largeur_ecran // 2,
-    hauteur_ecran // 20
-)
+#texte_score_total_sets_precedents.setGeometry(
+#    largeur_ecran // 2,              # moitié droite
+#    hauteur_ecran // 2 + hauteur_ecran // 20,   # début du bas
+#    largeur_ecran // 2,
+#    hauteur_ecran // 20
+#)
 
 
 
 
 # Bouton START_SET
 bouton_start_set.setGeometry(
-    (largeur_ecran // 2) - largeur_ecran // 10,
-    (hauteur_ecran // 2) - hauteur_ecran // 10,
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
+    hauteur_ecran-hauteur_ecran // 10,
     largeur_ecran // 10,
     hauteur_ecran // 10
 )
@@ -322,8 +336,8 @@ bouton_start_set.clicked.connect(start_set)
 
 # Bouton START_PENALITE1
 bouton_start_penalite_equipe1.setGeometry(
-    (largeur_ecran // 2) - largeur_ecran // 6,
-    (hauteur_ecran // 2) - hauteur_ecran // 8,
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 12,
+    hauteur_ecran-hauteur_ecran // 8,
     largeur_ecran // 6,
     hauteur_ecran // 8
 )
@@ -331,8 +345,8 @@ bouton_start_penalite_equipe1.clicked.connect(start_penalite_equipe1)
 
 # Bouton START_PENALITE2
 bouton_start_penalite_equipe2.setGeometry(
-    (largeur_ecran // 2) - largeur_ecran // 6,
-    (hauteur_ecran // 2) - hauteur_ecran // 8,
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 12,
+    hauteur_ecran-hauteur_ecran // 8,
     largeur_ecran // 6,
     hauteur_ecran // 8
 )
@@ -342,19 +356,27 @@ bouton_start_penalite_equipe2.clicked.connect(start_penalite_equipe2)
 
 bouton_quitter.raise_()
 
-score.setGeometry(
-    largeur_ecran // 2,
-    0,
+score1.setGeometry(
+    largeur_ecran // 2 + largeur_ecran//8,
+    hauteur_ecran // 4,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
 
-score_total.setGeometry(
-    largeur_ecran // 2,
-    hauteur_ecran//2,
+score2.setGeometry(
+    largeur_ecran // 2 ,
+    hauteur_ecran // 4 ,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
+
+
+#score_total.setGeometry(
+#    largeur_ecran // 2,
+#    hauteur_ecran//2,
+#    largeur_ecran // 2,
+#    hauteur_ecran // 2
+#)
 
 
 total_sets_gagnes.setGeometry(
@@ -367,7 +389,7 @@ total_sets_gagnes.setGeometry(
 
 chrono.setGeometry(
     0,
-    0,
+    hauteur_ecran//10,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
@@ -390,10 +412,11 @@ timer = Timer(
 
 )
 
-points = Score(score,score_total, total_sets_gagnes)
+points = Score(score1,score2,score_total, total_sets_gagnes)
 
 btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Vidéo")
 btn_video.show()
+
 
 
 cam = CameraWidget(interface ,largeur_ecran, hauteur_ecran)

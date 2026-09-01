@@ -141,8 +141,8 @@ class VideoButton:
         btn_h = hauteur_ecran // 14
 
         # Positionné en bas à droite
-        x = largeur_ecran - btn_w - int(0.05 * largeur_ecran)
-        y = hauteur_ecran - btn_h - 20
+        x = 0
+        y = hauteur_ecran - btn_h
 
         self.bouton = QPushButton(label, parent)
         self.bouton.setGeometry(x, y, btn_w, btn_h)
@@ -168,3 +168,6 @@ class VideoButton:
             if path:
                 player = VideoPlayer(self.parent, path)
                 player.exec()
+
+    def raise_button_replay(self):
+        self.bouton.raise_()

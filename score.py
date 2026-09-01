@@ -2,10 +2,11 @@ from PySide6.QtWidgets import * #importe tous les widgets
 
 class Score():
     
-    def __init__(self, score, score_total, total_sets_gagnes):
+    def __init__(self, score1, score2, score_total, total_sets_gagnes):
         super().__init__()
         
-        self.score = score
+        self.score1_label = score1
+        self.score2_label = score2
         self.score_total = score_total
         self.total_sets_gagnes = total_sets_gagnes
         
@@ -24,9 +25,10 @@ class Score():
 
 
     def update_score(self):
-        self.score.setText( f"Equipe 1 vs Equipe 2\n"
-            f"{self.score1}                     {self.score2}")
-    
+        self.score1_label.setText(f"{self.score1}")
+        self.score2_label.setText(f"{self.score2}")
+
+        
     def update_score_total(self):
 
         self.score_total.setText( f"Equipe 1 vs Equipe 2\n"
