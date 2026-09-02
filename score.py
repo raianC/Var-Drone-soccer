@@ -2,13 +2,14 @@ from PySide6.QtWidgets import * #importe tous les widgets
 
 class Score():
     
-    def __init__(self, score1, score2, score_total, total_sets_gagnes):
+    def __init__(self, score1, score2, score_total, total_sets_gagnes1, total_sets_gagnes2):
         super().__init__()
         
         self.score1_label = score1
         self.score2_label = score2
         self.score_total = score_total
-        self.total_sets_gagnes = total_sets_gagnes
+        self.total_sets_gagnes1_label = total_sets_gagnes1
+        self.total_sets_gagnes2_label = total_sets_gagnes2
         
         self.score1 = 0
         self.score2 = 0
@@ -87,11 +88,10 @@ class Score():
             self.sets_gagnes1+=1
 
         if self.score1<self.score2:
-                    self.sets_gagnes2+=1
+            self.sets_gagnes2+=1
 
-
-        self.total_sets_gagnes.setText( f"Equipe 1 vs Equipe 2\n"
-                    f"{self.sets_gagnes1}                     {self.sets_gagnes2}")
+        self.total_sets_gagnes1_label.setText(f"Sets won: "  f"{self.sets_gagnes1}")
+        self.total_sets_gagnes2_label.setText(f"Sets won: "  f"{self.sets_gagnes2}")
 
 
     def test_winner(self):

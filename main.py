@@ -55,6 +55,8 @@ def fin_set():
 
     if duree_penalite_accordee_equipe1 > 0:
         bouton_start_penalite_equipe1.show()
+        bouton_start_penalite_equipe1.raise_()
+
     else:
         fin_penalite_accordee_equipe1()
 
@@ -91,6 +93,7 @@ def fin_penalite_accordee_equipe1():
 
     if duree_penalite_accordee_equipe2 > 0:
         bouton_start_penalite_equipe2.show()
+        bouton_start_penalite_equipe2.raise_()
     else:
         fin_penalite_accordee_equipe2()
 
@@ -99,8 +102,9 @@ def fin_penalite_accordee_equipe2():
     
 
     points.fin_penalite()
-    points.ajouter_set_au_total()
+   #points.ajouter_set_au_total()
     points.update_sets_gagnes()
+    total_sets_gagnes1.raise_()
 
     #déconnecte uniquement si a été connecté avant
     try:
@@ -114,7 +118,7 @@ def fin_penalite_accordee_equipe2():
     # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
         bouton_start_set.setText(f"START SET {numero_set}")
         bouton_start_set.show()
-        
+        bouton_start_set.raise_()
 
 
 
@@ -147,7 +151,7 @@ def start_game():
     #bouton_3sets.hide()
     #texte_accueil.hide()
    
-    bouton_start_set.show()
+    
     chrono.show()
     score1.show()
     score2.show()
@@ -155,11 +159,18 @@ def start_game():
 
     texte_team1.show()
     texte_team2.show()
+    total_sets_gagnes1.show()
+    total_sets_gagnes2.show()
+    points.update_sets_gagnes()
+
+    bouton_start_set.show()
+    bouton_start_set.raise_()
     #texte_nb_sets_total_gagnes.show()
     #texte_score_total_sets_precedents.show()
     
     cam.start()
     btn_video.raise_button_replay()
+
 
 def sauvegarde_touche(categorie):
     cam.enregistrer_video(categorie)
@@ -168,7 +179,7 @@ chrono = QLabel(interface)
 chrono.setAlignment(Qt.AlignCenter)
 chrono.setText("0:0")
 chrono.setStyleSheet(
-    "color:white; font-size:40px;"
+    "color:white; font-size:60px;"
 )
 chrono.hide()
 
@@ -178,10 +189,10 @@ bouton_quitter = QPushButton("Quitter", interface)
 bouton_start_set = QPushButton(f"START SET {numero_set}", interface)
 bouton_start_set.hide()
 
-bouton_start_penalite_equipe1 = QPushButton(f"START PENALITE ACCORDEE A L'EQUIPE 1", interface)
+bouton_start_penalite_equipe1 = QPushButton(f"TEAM 1", interface)
 bouton_start_penalite_equipe1.hide()
 
-bouton_start_penalite_equipe2 = QPushButton(f"START PENALITE ACCORDEE A L'EQUIPE 2", interface)
+bouton_start_penalite_equipe2 = QPushButton(f"TEAM 2", interface)
 bouton_start_penalite_equipe2.hide()
 
 
@@ -207,13 +218,19 @@ score_total.setStyleSheet(
 )
 score_total.hide()
 
-total_sets_gagnes = QLabel(interface)
-total_sets_gagnes.setAlignment(Qt.AlignCenter)
-total_sets_gagnes.setStyleSheet(
-    "color:white; font-size:40px;"
+total_sets_gagnes1 = QLabel(interface)
+total_sets_gagnes1.setAlignment(Qt.AlignCenter)
+total_sets_gagnes1.setStyleSheet(
+    "color:blue; font-size:30px;"
 )
-total_sets_gagnes.hide()
+total_sets_gagnes1.hide()
 
+total_sets_gagnes2 = QLabel(interface)
+total_sets_gagnes2.setAlignment(Qt.AlignCenter)
+total_sets_gagnes2.setStyleSheet(
+    "color:red; font-size:30px;"
+)
+total_sets_gagnes2.hide()
 
 texte_entete = QLabel(interface)
 texte_entete.setText("VAR DRONE SOCCER")
@@ -339,19 +356,19 @@ bouton_start_set.clicked.connect(start_set)
 
 # Bouton START_PENALITE1
 bouton_start_penalite_equipe1.setGeometry(
-    largeur_ecran-largeur_ecran // 4-largeur_ecran // 12,
-    hauteur_ecran-hauteur_ecran // 8,
-    largeur_ecran // 6,
-    hauteur_ecran // 8
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
+    hauteur_ecran-hauteur_ecran // 10,
+    largeur_ecran // 10,
+    hauteur_ecran // 10
 )
 bouton_start_penalite_equipe1.clicked.connect(start_penalite_equipe1)
 
 # Bouton START_PENALITE2
 bouton_start_penalite_equipe2.setGeometry(
-    largeur_ecran-largeur_ecran // 4-largeur_ecran // 12,
-    hauteur_ecran-hauteur_ecran // 8,
-    largeur_ecran // 6,
-    hauteur_ecran // 8
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
+    hauteur_ecran-hauteur_ecran // 10,
+    largeur_ecran // 10,
+    hauteur_ecran // 10
 )
 bouton_start_penalite_equipe2.clicked.connect(start_penalite_equipe2)
 
@@ -361,14 +378,14 @@ bouton_quitter.raise_()
 
 score1.setGeometry(
     largeur_ecran // 2 + largeur_ecran//8,
-    hauteur_ecran // 4,
+    hauteur_ecran // 6,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
 
 score2.setGeometry(
-    largeur_ecran // 2 ,
-    hauteur_ecran // 4 ,
+    largeur_ecran // 2 - largeur_ecran//8 ,
+    hauteur_ecran // 6 ,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
@@ -382,9 +399,16 @@ score2.setGeometry(
 #)
 
 
-total_sets_gagnes.setGeometry(
+total_sets_gagnes1.setGeometry(
+    largeur_ecran // 2 + largeur_ecran//8,
+    hauteur_ecran // 2,
     largeur_ecran // 2,
-    hauteur_ecran//2,
+    hauteur_ecran // 2
+)
+
+total_sets_gagnes2.setGeometry(
+    largeur_ecran // 2 - largeur_ecran//8 ,
+    hauteur_ecran // 2 ,
     largeur_ecran // 2,
     hauteur_ecran // 2
 )
@@ -415,7 +439,7 @@ timer = Timer(
 
 )
 
-points = Score(score1,score2,score_total, total_sets_gagnes)
+points = Score(score1,score2,score_total, total_sets_gagnes1, total_sets_gagnes2)
 
 btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Videos")
 btn_video.show()

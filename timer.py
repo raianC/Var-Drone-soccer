@@ -32,7 +32,7 @@ class Timer(QWidget):
         minutes = self.duree_match//60 # // division entière, sans virgule
         secondes = self.duree_match % 60
 
-        self.chrono.setStyleSheet("color:white; font-size:40px;")
+        self.chrono.setStyleSheet("color:white; font-size:60px;")
         self.chrono.setText(f"{minutes}:{secondes}")
         
         if self.duree_match <= 0 :   # si la fin du temps de match atteint
@@ -54,7 +54,7 @@ class Timer(QWidget):
             minutes = self.duree_penalite_accordee_equipe1//60 # // division entière, sans virgule
             secondes = self.duree_penalite_accordee_equipe1 % 60
 
-            self.chrono.setStyleSheet("color: red; font-size: 40px; border:2px solid white;")
+            self.chrono.setStyleSheet("color: green; font-size: 60px;")
             self.chrono.setText(f"{minutes}:{secondes}")
             
             
@@ -73,7 +73,7 @@ class Timer(QWidget):
         minutes = self.duree_penalite_accordee_equipe2//60 # // division entière, sans virgule
         secondes = self.duree_penalite_accordee_equipe2 % 60
 
-        self.chrono.setStyleSheet("color: red; font-size: 40px; border:2px solid white;")
+        self.chrono.setStyleSheet("color: green; font-size: 60px;")
         self.chrono.setText(f"{minutes}:{secondes}")
             
         
