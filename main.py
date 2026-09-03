@@ -18,6 +18,10 @@ duree_match = 8
 
 #nombre_sets = 0
 numero_set = 1
+num_penalty = 1
+i=1
+
+penalty=False
 
 app = QApplication(sys.argv)
 
@@ -33,16 +37,29 @@ def start_set():
 
     timer_match.start(1000)
     bouton_start_set.hide()
-    timer_match.timeout.connect(timer.update_timer_match)
+    bouton_start_penalty.hide()
+    if penalty==False:
+        timer_match.timeout.connect(timer.update_timer_match)
+    elif penalty==True:
+        timer_match.timeout.connect(timer.update_timer_penalty)
 
     points.start_set()
 
 
 def fin_set():
-    timer_match.timeout.disconnect(timer.update_timer_match)
+    if penalty==False:
+        timer_match.timeout.disconnect(timer.update_timer_match)
+    elif penalty==True:
+            timer_match.timeout.connect(timer.update_timer_penalty)
+
+    global num_penalty
     global numero_set
+
     timer.reset_match()
-    numero_set += 1
+    if penalty==False:
+        numero_set += 1
+    elif penalty==True:
+        num_penalty += 1
     points.fin_set()
 
     #juste pour les tests avant la partie de Dorian
@@ -52,13 +69,18 @@ def fin_set():
     duree_penalite_accordee_equipe2=5
     
 
+    if penalty==False:
+        if duree_penalite_accordee_equipe1 > 0:
+            bouton_start_penalite_equipe1.show()
+            bouton_start_penalite_equipe1.raise_()
 
-    if duree_penalite_accordee_equipe1 > 0:
-        bouton_start_penalite_equipe1.show()
-        bouton_start_penalite_equipe1.raise_()
-
+        else:
+            fin_penalite_accordee_equipe1()
     else:
-        fin_penalite_accordee_equipe1()
+        points.sommer_score_penalty()
+        score_total.show()
+        points.display_score_total_penalty()
+        fin_penalite_accordee_equipe2()
 
 def start_penalite_equipe1():
     points.start_penalite()
@@ -79,7 +101,7 @@ def start_penalite_equipe2():
     timer_match.timeout.connect(timer.penalite_accordee_equipe2)
 
     #ligne de test, à suprimer:
-    if numero_set-1==1 or numero_set-1==2:
+    if numero_set-1==1 or num_penalty==4 or num_penalty==5:
         points.ajouter_point_equipe2()
         points.ajouter_point_equipe2()
 
@@ -102,26 +124,37 @@ def fin_penalite_accordee_equipe1():
 
 
 def fin_penalite_accordee_equipe2():
+    global penalty
+    global i
+    if penalty==True :
+        i+=1
+        departage()
+    else:    
+        points.fin_penalite()
+        points.ajouter_set_au_total()
+        points.update_sets_gagnes()
+        total_sets_gagnes1.raise_()
 
-    points.fin_penalite()
-    points.ajouter_set_au_total()
-    points.update_sets_gagnes()
-    total_sets_gagnes1.raise_()
-
-    #déconnecte uniquement si a été connecté avant
-    try:
-        timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
-    except TypeError:
-        pass
+        #déconnecte uniquement si a été connecté avant
+        try:
+            timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
+        except TypeError:
+            pass
 
         
-    if  points.test_winner()==False and numero_set-1<3: # nouveau set tant qu'il n'y a pas de gagnant et qu'on n'a pas atteint les 3 sets
-    # numero_set-1 et non numero_set car numero_set est incrémenté à la fin du set et non à la fin des penalites 
-    # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
-        bouton_start_set.setText(f"START SET {numero_set}")
-        bouton_start_set.show()
-        bouton_start_set.raise_()
-    else:
+        if  points.test_winner()==False: 
+        # nouveau set tant qu'il n'y a pas de gagnant et qu'on n'a pas atteint les 3 sets
+        # numero_set-1 et non numero_set car numero_set est incrémenté à la fin du set et non à la fin des penalites 
+        # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
+            if numero_set-1<3 :
+                bouton_start_set.setText(f"START SET {numero_set}")
+                bouton_start_set.show()
+                bouton_start_set.raise_()
+            elif numero_set-1==3:
+                penalty=True
+                departage()
+
+        elif points.test_winner()==True:
         
             chrono.hide()
             score1.hide()
@@ -150,16 +183,23 @@ def display_score_total():
     points.display_score_total()
 
 
+def departage():
+    global i
+    if i<=6:
+        total_sets_gagnes1.hide()
+        total_sets_gagnes2.hide()
+        bouton_start_penalty.show()
+        bouton_start_penalty.raise_()
+           
+        
+    if i==7:
+        if points.test_winner_penalty()==False:
+           print("Mort subite")
+        else:
+           print("Fin partie")
 
-def start_game():
-    #global nombre_sets
 
-    #nombre_sets = 3
-
-    #bouton_2sets.hide()
-    #bouton_3sets.hide()
-    #texte_accueil.hide()
-   
+def start_game():   
     
     chrono.show()
     score1.show()
@@ -183,6 +223,9 @@ def start_game():
 
 def sauvegarde_touche(categorie):
     cam.enregistrer_video(categorie)
+
+
+
     
 chrono = QLabel(interface)
 chrono.setAlignment(Qt.AlignCenter)
@@ -197,6 +240,17 @@ bouton_quitter = QPushButton("Quitter", interface)
 
 bouton_start_set = QPushButton(f"START SET {numero_set}", interface)
 bouton_start_set.hide()
+
+bouton_start_penalty = QPushButton(f"START PENALTY {num_penalty}", interface)
+bouton_start_penalty.hide()
+
+
+bouton_choix_penalite1 = QPushButton(f"TEAM 1", interface)
+bouton_choix_penalite1.hide()
+
+bouton_choix_penalite1 = QPushButton(f"TEAM 1", interface)
+bouton_choix_penalite1.hide()
+
 
 bouton_start_penalite_equipe1 = QPushButton(f"TEAM 1", interface)
 bouton_start_penalite_equipe1.hide()
@@ -228,6 +282,7 @@ score_total.setStyleSheet(
 )
 score_total.hide()
 
+
 total_sets_gagnes1 = QLabel(interface)
 total_sets_gagnes1.setAlignment(Qt.AlignCenter)
 total_sets_gagnes1.setStyleSheet(
@@ -241,6 +296,7 @@ total_sets_gagnes2.setStyleSheet(
     "color:blue; font-size:30px;"
 )
 total_sets_gagnes2.hide()
+
 
 texte_entete = QLabel(interface)
 texte_entete.setText("VAR DRONE SOCCER")
@@ -359,6 +415,16 @@ bouton_start_set.setGeometry(
 )
 
 bouton_start_set.clicked.connect(start_set)
+
+# Bouton START_SET
+bouton_start_penalty.setGeometry(
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
+    hauteur_ecran-hauteur_ecran // 10,
+    largeur_ecran // 10,
+    hauteur_ecran // 10
+)
+
+bouton_start_penalty.clicked.connect(start_set)
 
 # Bouton START_PENALITE1
 bouton_start_penalite_equipe1.setGeometry(

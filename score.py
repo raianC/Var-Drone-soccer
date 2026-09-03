@@ -23,6 +23,10 @@ class Score():
         self.sets_gagnes1 = 0
         self.sets_gagnes2 = 0
 
+        self.score_total_penalty1=0
+        self.score_total_penalty2=0
+
+
 
 
     def update_score(self):
@@ -34,7 +38,11 @@ class Score():
 
         self.score_total.setText( f"Team 1 vs Team 2\n"
             f"   {self.score1_total}                  {self.score2_total}")
-    
+
+    def display_score_total_penalty(self):
+
+        self.score_total.setText( f"Team 1 vs Team 2\n"
+            f"   {self.score_total_penalty1}                  {self.score_total_penalty2}")
     
     def ajouter_set_au_total(self):
 
@@ -42,7 +50,9 @@ class Score():
         self.score2_total += self.score2
 
     
-    
+    def sommer_score_penalty(self):
+        self.score_total_penalty1 += self.score1 
+        self.score_total_penalty2 += self.score2
     
     
     def start_set(self):
@@ -105,3 +115,16 @@ class Score():
         else:
             print("pas encore de gagnant")
             return False
+
+    def test_winner_penalty(self):
+        if self.score_total_penalty1>self.score_total_penalty2:
+                print("Equipe 1 gagnante")
+                return True
+                    
+        if self.score_total_penalty1<self.score_total_penalty2:
+                print("Equipe 2 gagnante")
+                return True 
+                    
+        else:
+                print("pas encore de gagnant")
+                return False

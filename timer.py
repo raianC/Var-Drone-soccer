@@ -23,7 +23,8 @@ class Timer(QWidget):
 
         self.duree_penalite_accordee_equipe1 = 0
         self.duree_penalite_accordee_equipe2 = 0 
-    
+
+        self.duree_penalty=10
 
     def update_timer_match(self):
         
@@ -41,6 +42,26 @@ class Timer(QWidget):
             self.stop_match()
             self.fin_set() 
 
+    def update_timer_penalty(self):
+            self.duree_penalty -= 1
+    
+            minutes = self.duree_penalty//60 # // division entière, sans virgule
+            secondes = self.duree_penalty % 60
+    
+            self.chrono.setStyleSheet("color:white; font-size:60px;")
+            self.chrono.setText(f"{minutes}:{secondes}")
+            
+            if self.duree_penalty <= 0 :   # si la fin du temps de match atteint
+                self.duree_penalty = 0
+                print("Temps penalty écoulé")
+                self.stop_match()
+                self.duree_penalty=10
+                self.fin_set() 
+                
+
+
+
+            
     def penalite_accordee_equipe1 (self):
             if self.duree_penalite_accordee_equipe1 <= 0 :   # si fin du temps de pénalités atteint
                 self.duree_penalite_accordee_equipe1 = 0
@@ -84,3 +105,4 @@ class Timer(QWidget):
 
     def reset_match(self):
         self.duree_match = self.duree_match_initiale
+        self.duree_penalty=10
