@@ -30,10 +30,10 @@ class Score():
         self.score2_label.setText(f"{self.score2}")
 
         
-    def update_score_total(self):
+    def display_score_total(self):
 
-        self.score_total.setText( f"Equipe 1 vs Equipe 2\n"
-            f"{self.score1_total}                     {self.score2_total}")
+        self.score_total.setText( f"Team 1 vs Team 2\n"
+            f"   {self.score1_total}                  {self.score2_total}")
     
     
     def ajouter_set_au_total(self):
@@ -41,7 +41,6 @@ class Score():
         self.score1_total += self.score1 # ajoute le score du set actuel au score des sets précédents
         self.score2_total += self.score2
 
-        self.update_score_total()
     
     
     
