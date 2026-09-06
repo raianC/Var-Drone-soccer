@@ -2,12 +2,13 @@ from PySide6.QtWidgets import * #importe tous les widgets
 
 class Score():
     
-    def __init__(self, score1, score2, score_total, total_sets_gagnes1, total_sets_gagnes2):
+    def __init__(self, score1, score2, score_total,score_total_penalty,  total_sets_gagnes1, total_sets_gagnes2):
         super().__init__()
         
         self.score1_label = score1
         self.score2_label = score2
         self.score_total = score_total
+        self.score_total_penalty = score_total_penalty
         self.total_sets_gagnes1_label = total_sets_gagnes1
         self.total_sets_gagnes2_label = total_sets_gagnes2
         
@@ -41,7 +42,7 @@ class Score():
 
     def display_score_total_penalty(self):
 
-        self.score_total.setText( f"Team 1 vs Team 2\n"
+        self.score_total_penalty.setText( f"Team 1 vs Team 2\n"
             f"   {self.score_total_penalty1}                  {self.score_total_penalty2}")
     
     def ajouter_set_au_total(self):

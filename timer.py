@@ -8,7 +8,7 @@ from PySide6.QtWidgets import * #importe tous les widgets
 class Timer(QWidget):
     
     
-    def __init__(self, duree_match, chrono, timer_match, fin_set, fin_penalite_accordee_equipe1,fin_penalite_accordee_equipe2):
+    def __init__(self, duree_match, chrono, timer_match, fin_set, fin_penalty, fin_penalite_accordee_equipe1,fin_penalite_accordee_equipe2):
         super().__init__()
 
         self.duree_match = duree_match
@@ -16,6 +16,7 @@ class Timer(QWidget):
         self.timer_match = timer_match
         
         self.fin_set = fin_set
+        self.fin_penalty = fin_penalty
         self.fin_penalite_accordee_equipe1=fin_penalite_accordee_equipe1
         self.fin_penalite_accordee_equipe2=fin_penalite_accordee_equipe2
 
@@ -25,6 +26,8 @@ class Timer(QWidget):
         self.duree_penalite_accordee_equipe2 = 0 
 
         self.duree_penalty=10
+
+
 
     def update_timer_match(self):
         
@@ -40,7 +43,7 @@ class Timer(QWidget):
             self.duree_match = 0
             print("Temps match écoulé")
             self.stop_match()
-            self.fin_set() 
+            self.fin_set()
 
     def update_timer_penalty(self):
             self.duree_penalty -= 1
@@ -56,7 +59,7 @@ class Timer(QWidget):
                 print("Temps penalty écoulé")
                 self.stop_match()
                 self.duree_penalty=10
-                self.fin_set() 
+                self.fin_penalty() 
                 
 
 

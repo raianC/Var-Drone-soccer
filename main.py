@@ -17,9 +17,8 @@ duree_penalite_accordee_equipe2 = 0
 duree_match = 8
 
 #nombre_sets = 0
-numero_set = 1
+numero_set = 3
 num_penalty = 1
-i=1
 
 penalty=False
 
@@ -27,6 +26,41 @@ app = QApplication(sys.argv)
 
 interface = QWidget()
 interface.setWindowTitle("Interface")
+
+def start_penalty():
+
+    timer_match.start(1000)
+    bouton_start_penalty.hide()
+    
+    timer_match.timeout.connect(timer.update_timer_penalty)
+
+    points.start_set()
+
+ #juste pour les test, à supprimer
+    if num_penalty== 1:
+        points.ajouter_point_equipe2()
+        points.ajouter_point_equipe2()
+    if num_penalty==4:
+        points.ajouter_point_equipe1()    
+
+
+def fin_penalty():
+    timer_match.timeout.disconnect(timer.update_timer_penalty)
+
+    global num_penalty
+
+    timer.reset_match()
+    num_penalty += 1
+    points.fin_set()
+
+
+
+    points.sommer_score_penalty()
+    score_total_penalty.show()
+    points.display_score_total_penalty()
+    departage()
+
+
 
 def start_set():
     global duree_penalite_accordee_equipe1
@@ -45,21 +79,17 @@ def start_set():
 
     points.start_set()
 
+   
+
 
 def fin_set():
-    if penalty==False:
-        timer_match.timeout.disconnect(timer.update_timer_match)
-    elif penalty==True:
-            timer_match.timeout.connect(timer.update_timer_penalty)
-
-    global num_penalty
+    timer_match.timeout.disconnect(timer.update_timer_match)
+   
     global numero_set
 
     timer.reset_match()
-    if penalty==False:
-        numero_set += 1
-    elif penalty==True:
-        num_penalty += 1
+    numero_set += 1
+    
     points.fin_set()
 
     #juste pour les tests avant la partie de Dorian
@@ -69,18 +99,13 @@ def fin_set():
     duree_penalite_accordee_equipe2=5
     
 
-    if penalty==False:
-        if duree_penalite_accordee_equipe1 > 0:
-            bouton_start_penalite_equipe1.show()
-            bouton_start_penalite_equipe1.raise_()
+    if duree_penalite_accordee_equipe1 > 0:
+        bouton_start_penalite_equipe1.show()
+        bouton_start_penalite_equipe1.raise_()
 
-        else:
-            fin_penalite_accordee_equipe1()
     else:
-        points.sommer_score_penalty()
-        score_total.show()
-        points.display_score_total_penalty()
-        fin_penalite_accordee_equipe2()
+        fin_penalite_accordee_equipe1()
+    
 
 def start_penalite_equipe1():
     points.start_penalite()
@@ -125,54 +150,51 @@ def fin_penalite_accordee_equipe1():
 
 def fin_penalite_accordee_equipe2():
     global penalty
-    global i
-    if penalty==True :
-        i+=1
-        departage()
-    else:    
-        points.fin_penalite()
-        points.ajouter_set_au_total()
-        points.update_sets_gagnes()
-        total_sets_gagnes1.raise_()
+    
+    
+    points.fin_penalite()
+    points.ajouter_set_au_total()
+    points.update_sets_gagnes()
+    total_sets_gagnes1.raise_()
 
-        #déconnecte uniquement si a été connecté avant
-        try:
-            timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
-        except TypeError:
-            pass
+    #déconnecte uniquement si a été connecté avant
+    try:
+        timer_match.timeout.disconnect(timer.penalite_accordee_equipe2)
+    except TypeError:
+        pass
 
         
-        if  points.test_winner()==False: 
-        # nouveau set tant qu'il n'y a pas de gagnant et qu'on n'a pas atteint les 3 sets
-        # numero_set-1 et non numero_set car numero_set est incrémenté à la fin du set et non à la fin des penalites 
-        # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
-            if numero_set-1<3 :
-                bouton_start_set.setText(f"START SET {numero_set}")
-                bouton_start_set.show()
-                bouton_start_set.raise_()
-            elif numero_set-1==3:
-                penalty=True
-                departage()
+    if  points.test_winner()==False: 
+    # nouveau set tant qu'il n'y a pas de gagnant et qu'on n'a pas atteint les 3 sets
+    # numero_set-1 et non numero_set car numero_set est incrémenté à la fin du set et non à la fin des penalites 
+    # laisser le test points.test_winner()==False avant numero_set-1<3 sinon ça ne teste pas si il y a un gagnant à la fin du 3ème set car la condition numero_set-1<3 n'est déjà pas remplie   
+        if numero_set-1<3 :
+            bouton_start_set.setText(f"START SET {numero_set}")
+            bouton_start_set.show()
+            bouton_start_set.raise_()
+        elif numero_set-1==3:
+            penalty=True
+            departage()
 
-        elif points.test_winner()==True:
+    elif points.test_winner()==True:
         
-            chrono.hide()
-            score1.hide()
-            score2.hide()
-            score_total.hide()
+        chrono.hide()
+        score1.hide()
+        score2.hide()
+        score_total.hide()
         
-            texte_team1.hide()
-            texte_team2.hide()
-            #total_sets_gagnes1.hide()
-            #total_sets_gagnes2.hide()
+        texte_team1.hide()
+        texte_team2.hide()
+        #total_sets_gagnes1.hide()
+        total_sets_gagnes2.hide()
         
-            bouton_start_set.hide()
+        bouton_start_set.hide()
             
-            cam.stop()
-            btn_video.hide()
-            bouton_affichage_score_total.show()
-            bouton_affichage_score_total.raise_()
-            #texte_gagnant.show()
+        cam.stop()
+        btn_video.hide()
+        bouton_affichage_score_total.show()
+        bouton_affichage_score_total.raise_()
+        #texte_gagnant.show()
 
 
 
@@ -184,15 +206,16 @@ def display_score_total():
 
 
 def departage():
-    global i
-    if i<=6:
+    global num_penalty
+    if num_penalty<=6:
         total_sets_gagnes1.hide()
         total_sets_gagnes2.hide()
+        bouton_start_penalty.setText(f"START PENALTY {num_penalty}")
         bouton_start_penalty.show()
         bouton_start_penalty.raise_()
            
         
-    if i==7:
+    if num_penalty==7:
         if points.test_winner_penalty()==False:
            print("Mort subite")
         else:
@@ -282,6 +305,12 @@ score_total.setStyleSheet(
 )
 score_total.hide()
 
+score_total_penalty = QLabel(interface)
+score_total_penalty.setAlignment(Qt.AlignCenter)
+score_total_penalty.setStyleSheet(
+    "color:white; font-size:80px;"
+)
+score_total_penalty.hide()
 
 total_sets_gagnes1 = QLabel(interface)
 total_sets_gagnes1.setAlignment(Qt.AlignCenter)
@@ -424,7 +453,7 @@ bouton_start_penalty.setGeometry(
     hauteur_ecran // 10
 )
 
-bouton_start_penalty.clicked.connect(start_set)
+bouton_start_penalty.clicked.connect(start_penalty)
 
 # Bouton START_PENALITE1
 bouton_start_penalite_equipe1.setGeometry(
@@ -470,6 +499,14 @@ score_total.setGeometry(
     hauteur_ecran // 2
 )
 
+score_total_penalty.setGeometry(
+    largeur_ecran // 2,
+    hauteur_ecran//2,
+    largeur_ecran // 2,
+    hauteur_ecran // 2
+)
+
+
 total_sets_gagnes1.setGeometry(
     largeur_ecran // 2 - largeur_ecran//8 ,
     hauteur_ecran // 2 ,
@@ -506,12 +543,13 @@ timer = Timer(
     chrono,
     timer_match,
     fin_set,
+    fin_penalty,
     fin_penalite_accordee_equipe1,
-    fin_penalite_accordee_equipe2
-
+    fin_penalite_accordee_equipe2,
+    
 )
 
-points = Score(score1,score2,score_total, total_sets_gagnes1, total_sets_gagnes2)
+points = Score(score1,score2,score_total, score_total_penalty, total_sets_gagnes1, total_sets_gagnes2)
 
 btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Videos")
 btn_video.show()
