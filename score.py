@@ -2,7 +2,7 @@ from PySide6.QtWidgets import * #importe tous les widgets
 
 class Score():
     
-    def __init__(self, score1, score2, score_total,score_total_penalty,  total_sets_gagnes1, total_sets_gagnes2):
+    def __init__(self, score1, score2, score_total,score_total_penalty,  total_sets_gagnes1, total_sets_gagnes2, fin_mort_subite):
         super().__init__()
         
         self.score1_label = score1
@@ -11,6 +11,8 @@ class Score():
         self.score_total_penalty = score_total_penalty
         self.total_sets_gagnes1_label = total_sets_gagnes1
         self.total_sets_gagnes2_label = total_sets_gagnes2
+
+        self.fin_mort_subite = fin_mort_subite
         
         self.score1 = 0
         self.score2 = 0
@@ -34,6 +36,9 @@ class Score():
         self.score1_label.setText(f"{self.score1}")
         self.score2_label.setText(f"{self.score2}")
 
+        if self.mort_subite==True and (self.score1>0 or self.score2>0):
+            self.winner_mort_subite()
+
         
     def display_score_total(self):
 
@@ -56,13 +61,13 @@ class Score():
         self.score_total_penalty2 += self.score2
     
     
-    def start_set(self):
+    def start_set(self, mort_subite=False):
         
         self.score1=0
         self.score2=0
 
         self.set_en_cours=True
-
+        self.mort_subite=mort_subite
         self.update_score()
 
 
@@ -129,3 +134,14 @@ class Score():
         else:
                 print("pas encore de gagnant")
                 return False
+
+
+    def winner_mort_subite(self):
+        if self.score1==1 and self.score2==0:
+            print("Equipe 1 gagnante")
+            self.fin_mort_subite()
+        elif self.score2==1 and self.score1==0:
+            print("Equipe 2 gagnante")
+            self.fin_mort_subite()
+        else:
+            print("Erreur mort subite")

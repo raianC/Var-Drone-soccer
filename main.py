@@ -14,13 +14,13 @@ from PySide6.QtGui import QShortcut, QKeySequence
 
 duree_penalite_accordee_equipe1 = 0
 duree_penalite_accordee_equipe2 = 0
-duree_match = 8
+duree_match =2
 
-#nombre_sets = 0
 numero_set = 3
 num_penalty = 1
 
 penalty=False
+mort_subite=False
 
 app = QApplication(sys.argv)
 
@@ -39,7 +39,7 @@ def start_penalty():
  #juste pour les test, à supprimer
     if num_penalty== 1:
         points.ajouter_point_equipe2()
-        points.ajouter_point_equipe2()
+        #points.ajouter_point_equipe2()
     if num_penalty==4:
         points.ajouter_point_equipe1()    
 
@@ -218,6 +218,8 @@ def departage():
     if num_penalty==7:
         if points.test_winner_penalty()==False:
            print("Mort subite")
+           bouton_start_mort_subite.show()
+           bouton_start_mort_subite.raise_()
         else:
            print("Fin partie")
 
@@ -237,8 +239,7 @@ def start_game():
 
     bouton_start_set.show()
     bouton_start_set.raise_()
-    #texte_nb_sets_total_gagnes.show()
-    #texte_score_total_sets_precedents.show()
+  
     
     cam.start()
     btn_video.raise_button_replay()
@@ -246,6 +247,31 @@ def start_game():
 
 def sauvegarde_touche(categorie):
     cam.enregistrer_video(categorie)
+
+
+def start_mort_subite():
+    global mort_subite
+    mort_subite=True
+    texte_mort_subite.show()
+    bouton_start_mort_subite.hide()
+    score_total_penalty.hide()
+    chrono.hide()
+
+    
+    points.start_set(mort_subite)
+    QTimer.singleShot(3000, lambda: points.ajouter_point_equipe1())
+
+def fin_mort_subite():
+    global mort_subite
+    mort_subite=False
+    points.fin_set()
+    print("Fin mort_subite")
+    texte_mort_subite.hide()
+
+
+    
+    
+    
 
 
 
@@ -266,6 +292,9 @@ bouton_start_set.hide()
 
 bouton_start_penalty = QPushButton(f"START PENALTY {num_penalty}", interface)
 bouton_start_penalty.hide()
+
+bouton_start_mort_subite = QPushButton(f"START SUDDEN DEATH", interface)
+bouton_start_mort_subite.hide()
 
 
 bouton_choix_penalite1 = QPushButton(f"TEAM 1", interface)
@@ -360,6 +389,14 @@ texte_team2.hide()
 
 
 
+texte_mort_subite = QLabel(interface)
+texte_mort_subite.setText("SUDDEN DEATH in progress !")
+texte_mort_subite.setAlignment(Qt.AlignCenter)
+texte_mort_subite.setStyleSheet(
+    "color:white; font-size:40px; font-weight:bold;"
+)
+texte_mort_subite.hide()
+
 
 interface.showFullScreen()
 
@@ -414,7 +451,12 @@ texte_team2.setGeometry(
 )
 
 
-
+texte_mort_subite.setGeometry(
+    largeur_ecran // 2,          
+    hauteur_ecran // 2,        # en haut
+    largeur_ecran // 2,        # largeur moitié écran
+    hauteur_ecran // 18        # petite hauteur pour titre
+)
 
 
 
@@ -445,7 +487,7 @@ bouton_start_set.setGeometry(
 
 bouton_start_set.clicked.connect(start_set)
 
-# Bouton START_SET
+# Bouton START_PENALTY
 bouton_start_penalty.setGeometry(
     largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
     hauteur_ecran-hauteur_ecran // 10,
@@ -454,6 +496,16 @@ bouton_start_penalty.setGeometry(
 )
 
 bouton_start_penalty.clicked.connect(start_penalty)
+
+# Bouton START_MORT_SUBITE
+bouton_start_mort_subite.setGeometry(
+    largeur_ecran-largeur_ecran // 4-largeur_ecran // 20,
+    hauteur_ecran-hauteur_ecran // 10,
+    largeur_ecran // 10,
+    hauteur_ecran // 10
+)
+
+bouton_start_mort_subite.clicked.connect(start_mort_subite)
 
 # Bouton START_PENALITE1
 bouton_start_penalite_equipe1.setGeometry(
@@ -549,7 +601,7 @@ timer = Timer(
     
 )
 
-points = Score(score1,score2,score_total, score_total_penalty, total_sets_gagnes1, total_sets_gagnes2)
+points = Score(score1,score2,score_total, score_total_penalty, total_sets_gagnes1, total_sets_gagnes2, fin_mort_subite)
 
 btn_video = VideoButton(interface, largeur_ecran, hauteur_ecran, "Videos")
 btn_video.show()

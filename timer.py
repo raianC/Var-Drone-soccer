@@ -25,7 +25,7 @@ class Timer(QWidget):
         self.duree_penalite_accordee_equipe1 = 0
         self.duree_penalite_accordee_equipe2 = 0 
 
-        self.duree_penalty=10
+        self.duree_penalty=2
 
 
 
@@ -108,4 +108,4 @@ class Timer(QWidget):
 
     def reset_match(self):
         self.duree_match = self.duree_match_initiale
-        self.duree_penalty=10
+        self.duree_penalty=2
