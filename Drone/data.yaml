@@ -1,4 +1,5 @@
 names:
   0: Drone
-path: .
-train: train.txt
+path: C:/Users/raian/Documents/GitHub/Var-Drone-soccer/Drone
+train: images/train
+val: images/val
