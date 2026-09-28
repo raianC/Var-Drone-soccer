@@ -1,0 +1,4 @@
+names:
+  0: Drone
+path: .
+train: train.txt
