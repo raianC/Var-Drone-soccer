@@ -1,11 +1,11 @@
 from ultralytics import YOLO
 
-model = YOLO("yolov8n.pt")
+model = YOLO("runs/detect/train13/weights/best.pt")
 
-results = model.train(
-    data="C:/Users/raian/Documents/GitHub/Var-Drone-soccer/Drone/data.yaml",
-    epochs=10,
-    imgsz=640,
-    batch=4,
-    mode="train"
+results = model.predict(
+    source="Drone/test/images",
+    conf=0.5,
+    save=True
 )
+
+print(results)
